@@ -1,0 +1,12 @@
+# graph/schema.graphql
+type Shipment {
+  shipmentID: ID!
+  orderID: Int!
+  carrierID: Int!
+  state: String!
+  dateAsignment: String!
+}
+
+type Query {
+  getAllShipments: [Shipment!]!
+}
