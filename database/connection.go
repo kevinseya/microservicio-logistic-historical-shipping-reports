@@ -16,7 +16,7 @@ func ConnectDB() {
 	cfg := config.AppConfig.Database
 
 	// Cadena de conexión para PostgreSQL
-	dsn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
+	dsn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=require",
 		cfg.Host, cfg.Port, cfg.User, cfg.Password, cfg.Name)
 
 	log.Printf("Connection to PostgreSQL: %s\n", dsn)
