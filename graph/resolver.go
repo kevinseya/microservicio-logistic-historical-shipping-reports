@@ -15,32 +15,32 @@ import (
 
 type Resolver struct{}
 
-// GetAllShipments es el resolver para el campo getAllShipments.
+// GetAll Shipments is the resolver for the getAll Shipments field.
 func (r *queryResolver) GetAllShipments(ctx context.Context) ([]*graph.Shipments, error) {
 	var shipments []*graph.Shipments
-	// Obtener todos los envíos desde la base de datos
+	// Get all shipments from the database
 	if err := database.DB.Find(&shipments).Error; err != nil {
 		return nil, err
 	}
 	log.Println("Shipments Data Received: ", shipments)
 
-	// Validación de los UUIDs: shipmentID, orderID, y carrierID
+	// Validation of UUIDs: shipmentID, orderID, and carrierID
 	for _, shipment := range shipments {
-		// Validar shipmentID
+		// Validate shipmentID
 		if shipment.ID != "" {
 			if _, err := uuid.Parse(shipment.ID); err != nil {
 				return nil, fmt.Errorf("shipmentID no es un UUID válido: %v", err)
 			}
 		}
 
-		// Validar orderID
+		// Validate orderID
 		if shipment.OrderID != "" {
 			if _, err := uuid.Parse(shipment.OrderID); err != nil {
 				return nil, fmt.Errorf("orderID no es un UUID válido: %v", err)
 			}
 		}
 
-		// Validar user_carrier_id
+		// Validate user_carrier_id
 		if shipment.UserCarrierID != "" {
 			if _, err := uuid.Parse(shipment.UserCarrierID); err != nil {
 				return nil, fmt.Errorf("user_carrier_id no es un UUID válido: %v", err)
