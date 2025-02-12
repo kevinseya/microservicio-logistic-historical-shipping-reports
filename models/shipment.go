@@ -2,24 +2,14 @@
 
 package graph
 
-
 type Query struct {
 }
 
-type Shipment struct {
-	
-	ShipmentID    string `json:"shipmentID"`
-	OrderID       int    `json:"orderID"`
-	CarrierID     int    `json:"carrierID"`
-	State         string `json:"state"`
-	DateAsignment string `json:"dateAsignment"`
+type Shipments struct {
+	ID            string `json:"id"`
+	OrderID       string `json:"order_id"`
+	UserCarrierID string `json:"user_carrier_id"`
+	Status        string `json:"status"`
+	CreatedAt     string `json:"created_at"`
+	UpdatedAt     string `json:"updated_at"`
 }
-
-func (Shipment) TableName() string {
-    return "shipment"
-}
-
-
-
-
-

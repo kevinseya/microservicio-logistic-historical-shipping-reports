@@ -1,39 +1,49 @@
 package graph
 
+// THIS CODE WILL BE UPDATED WITH SCHEMA CHANGES. PREVIOUS IMPLEMENTATION FOR SCHEMA CHANGES WILL BE KEPT IN THE COMMENT SECTION. IMPLEMENTATION FOR UNCHANGED SCHEMA WILL BE KEPT.
+
 import (
 	"context"
-	"encoding/hex"
 	"fmt"
 	"historical-shipping-reports/database"
 	"historical-shipping-reports/graph/generated"
 	graph "historical-shipping-reports/models"
+	"log"
+
+	"github.com/google/uuid"
 )
 
-// Resolver is the root resolver for the GraphQL API.
 type Resolver struct{}
 
-// GetAllShipments is the resolver for the getAllShipments field.
-func (r *queryResolver) GetAllShipments(ctx context.Context) ([]*graph.Shipment, error) {
-	var shipments []*graph.Shipment
-	// Get all Shipments of database
+// GetAllShipments es el resolver para el campo getAllShipments.
+func (r *queryResolver) GetAllShipments(ctx context.Context) ([]*graph.Shipments, error) {
+	var shipments []*graph.Shipments
+	// Obtener todos los envíos desde la base de datos
 	if err := database.DB.Find(&shipments).Error; err != nil {
 		return nil, err
 	}
+	log.Println("Shipments Data Received: ", shipments)
 
-	// Converter shipmentID of string to hexadecimal
-	for i, shipment := range shipments {
-		if shipment.ShipmentID != "" {
-			// Converter of string to hexadecimal
-			hexID := hex.EncodeToString([]byte(shipment.ShipmentID))
+	// Validación de los UUIDs: shipmentID, orderID, y carrierID
+	for _, shipment := range shipments {
+		// Validar shipmentID
+		if shipment.ID != "" {
+			if _, err := uuid.Parse(shipment.ID); err != nil {
+				return nil, fmt.Errorf("shipmentID no es un UUID válido: %v", err)
+			}
+		}
 
-			// ID hexadecimal have 32 characters
-			if len(hexID) == 32 {
-				// Insert (-) of formated UUID
-				shipments[i].ShipmentID = fmt.Sprintf("%s-%s-%s-%s-%s",
-					hexID[:8], hexID[8:12], hexID[12:16], hexID[16:20], hexID[20:])
-			} else {
-				// If length is not adequate, resolve error
-				return nil, fmt.Errorf("shipmentID hexadecimal invalid")
+		// Validar orderID
+		if shipment.OrderID != "" {
+			if _, err := uuid.Parse(shipment.OrderID); err != nil {
+				return nil, fmt.Errorf("orderID no es un UUID válido: %v", err)
+			}
+		}
+
+		// Validar user_carrier_id
+		if shipment.UserCarrierID != "" {
+			if _, err := uuid.Parse(shipment.UserCarrierID); err != nil {
+				return nil, fmt.Errorf("user_carrier_id no es un UUID válido: %v", err)
 			}
 		}
 	}
@@ -45,3 +55,13 @@ func (r *queryResolver) GetAllShipments(ctx context.Context) ([]*graph.Shipment,
 func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
 
 type queryResolver struct{ *Resolver }
+
+// !!! WARNING !!!
+// The code below was going to be deleted when updating resolvers. It has been copied here so you have
+// one last chance to move it out of harms way if you want. There are two reasons this happens:
+//  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
+//    it when you're done.
+//  - You have helper methods in this file. Move them out to keep these resolver files clean.
+/*
+	type Resolver struct{}
+*/

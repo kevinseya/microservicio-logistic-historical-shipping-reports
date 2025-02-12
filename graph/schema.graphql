@@ -1,12 +1,12 @@
-# graph/schema.graphql
-type Shipment {
-  shipmentID: ID!
-  orderID: Int!
-  carrierID: Int!
-  state: String!
-  dateAsignment: String!
+type Shipments {
+  id: ID!              # Se mapeará con la columna 'id' de la base de datos (tipo UUID)
+  order_id: ID!        # Se mapeará con la columna 'order_id' de la base de datos (tipo UUID)
+  user_carrier_id: ID! # Se mapeará con la columna 'user_carrier_id' de la base de datos (tipo UUID)
+  status: String!      # Se mapeará con la columna 'status' de la base de datos (tipo text)
+  created_at: String!  # Se mapeará con la columna 'created_at' de la base de datos (tipo timestamp)
+  updated_at: String!  # Se mapeará con la columna 'updated_at' de la base de datos (tipo timestamp)
 }
 
 type Query {
-  getAllShipments: [Shipment!]!
+  getAllShipments: [Shipments!]!  # Consulta para obtener todos los envíos
 }
