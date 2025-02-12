@@ -25,16 +25,16 @@ type Config struct {
 var AppConfig Config
 
 func LoadConfig() {
-	// Cargar variables de entorno desde el archivo .env
+	// Load environment variables from the .env file
 	err := godotenv.Load(".env")
 	if err != nil {
 		log.Fatalf("Error loading .env file: %v", err)
 	}
 
-	// Asignar las variables de entorno a la estructura AppConfig
+	// Assign environment variables to the AppConfig structure
 	AppConfig.Server.Port = os.Getenv("SERVER_PORT")
 	AppConfig.Database.Host = os.Getenv("DB_HOST")
-	AppConfig.Database.Port = getEnvAsInt("DB_PORT", 5432) // Valor por defecto 5432
+	AppConfig.Database.Port = getEnvAsInt("DB_PORT", 5432) // Default value 5432
 	AppConfig.Database.User = os.Getenv("DB_USER")
 	AppConfig.Database.Password = os.Getenv("DB_PASSWORD")
 	AppConfig.Database.Name = os.Getenv("DB_NAME")
@@ -42,13 +42,13 @@ func LoadConfig() {
 	log.Println("Configuration loaded successfully.")
 }
 
-// Función para convertir una variable de entorno a un entero con un valor predeterminado
+// Function to convert an environment variable to an integer with a default value
 func getEnvAsInt(key string, defaultValue int) int {
 	value := os.Getenv(key)
 	if value == "" {
 		return defaultValue
 	}
-	// Convertir la variable de entorno a un entero
+	// Convert the environment variable to an integer
 	result, err := strconv.Atoi(value)
 	if err != nil {
 		log.Printf("Error converting %s to int, using default value %d", key, defaultValue)
