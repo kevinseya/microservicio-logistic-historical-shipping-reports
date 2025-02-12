@@ -18,7 +18,7 @@ type Resolver struct{}
 // GetAll Shipments is the resolver for the getAll Shipments field.
 func (r *queryResolver) GetAllShipments(ctx context.Context) ([]*graph.Shipments, error) {
 	var shipments []*graph.Shipments
-	// Obtener todos los envíos desde la base de datos
+	// Get all shipments from the database
 	if err := database.DB.Find(&shipments).Error; err != nil {
 		return nil, err
 	}
