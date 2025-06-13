@@ -1,0 +1,12 @@
+type Shipments {
+  id: ID!              # Will be mapped to the database 'id' column (UUID type)
+  order_id: ID!        # Will be mapped to the database column 'order_id' (UUID type)
+  user_carrier_id: ID! # Will be mapped to the database column 'user_carrier_id' (UUID type)
+  status: String!      # It will be mapped to the 'status' column in the database (text type)
+  created_at: String!  # Will be mapped to the database column 'created_at' (timestamp type)
+  updated_at: String!  # Will be mapped to the database column 'updated_at' (timestamp type)
+}
+
+type Query {
+  getAllShipments: [Shipments!]!  # Check for all shipments
+}
